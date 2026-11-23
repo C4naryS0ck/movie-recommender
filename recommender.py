@@ -383,7 +383,16 @@ class Recommender:
         r = self.meta.iloc[i]
         if r["original_language"] == "en" or "aka_en" not in r:
             return None
-        names = [a for a in r["aka_en"] if 2 < len(a) < len(r["title"]) and ":" not in a]
+        title_key = normalize(r["title"])
+
+        def useful(a: str) -> bool:
+            k = normalize(a)
+            return (len(a) >= 5 and not a.isupper() and ":" not in a  # no "COL"/"TAF" acronyms
+                    and len(a) < len(r["title"])
+                    and k not in title_key and title_key not in k          # "Your Name" for "Your Name."
+                    and difflib.SequenceMatcher(None, k, title_key).ratio() < 0.8)  # "Deaths Game"
+
+        names = [a for a in r["aka_en"] if useful(a)]
         return min(names, key=len) if names else None
 
 
