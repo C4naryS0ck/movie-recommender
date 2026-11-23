@@ -7,4 +7,4 @@ rapidfuzz>=3.0
 requests>=2.31
 python-dotenv>=1.0
 sentence-transformers>=3.0
-streamlit>=1.40
+streamlit[auth]>=1.57

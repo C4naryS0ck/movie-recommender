@@ -379,21 +379,26 @@ class Recommender:
                 + (f" · aka {aka}" if aka else ""))
 
     def aka(self, i: int) -> str | None:
-        """Best-known English alias for non-English titles ('Goblin'), else None."""
         r = self.meta.iloc[i]
-        if r["original_language"] == "en" or "aka_en" not in r:
-            return None
-        title_key = normalize(r["title"])
+        return best_aka(r["title"], r["original_language"], r.get("aka_en"))
 
-        def useful(a: str) -> bool:
-            k = normalize(a)
-            return (len(a) >= 5 and not a.isupper() and ":" not in a  # no "COL"/"TAF" acronyms
-                    and len(a) < len(r["title"])
-                    and k not in title_key and title_key not in k          # "Your Name" for "Your Name."
-                    and difflib.SequenceMatcher(None, k, title_key).ratio() < 0.8)  # "Deaths Game"
 
-        names = [a for a in r["aka_en"] if useful(a)]
-        return min(names, key=len) if names else None
+def best_aka(title: str, language: str, aka_en) -> str | None:
+    """Best-known English alias for a non-English title ('Goblin'), else None.
+    Shared by the app and serve.py so both show the same name."""
+    if language == "en" or not isinstance(aka_en, (list, tuple)) or not aka_en:
+        return None
+    title_key = normalize(title)
+
+    def useful(a: str) -> bool:
+        k = normalize(a)
+        return (len(a) >= 5 and not a.isupper() and ":" not in a  # no "COL"/"TAF" acronyms
+                and len(a) < len(title)
+                and k not in title_key and title_key not in k          # "Your Name" for "Your Name."
+                and difflib.SequenceMatcher(None, k, title_key).ratio() < 0.8)  # "Deaths Game"
+
+    names = [a for a in aka_en if useful(a)]
+    return min(names, key=len) if names else None
 
 
 # --------------------------------------------------------------------------- #
