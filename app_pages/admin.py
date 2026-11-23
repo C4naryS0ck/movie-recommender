@@ -33,7 +33,7 @@ if not is_admin():
 
 # ---- admin only below ----------------------------------------------------------------------
 with st.container(horizontal=True, vertical_alignment="center"):
-    st.caption(f"signed in as **{st.user.get('email')}**")
+    st.caption(f"signed in as **{st.user.get('email')}** · storage: **{fb.backend()}**")
     st.button("sign out", key="logout", icon=":material/logout:", on_click=st.logout)
 
 reviews = fb.all_feedback(include_archived=True)
