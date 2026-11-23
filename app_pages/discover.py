@@ -110,7 +110,7 @@ with st.container(key="controls", gap="small"):
         )
         with st.popover("tweak it", icon=":material/tune:", key="fine"):
             years = st.slider("release year", y_min, y_max, (1980, y_max), key="years")
-            top_n = st.slider("how many recs", 6, 30, 12, step=3, key="top_n")
+            top_n = st.slider("how many recommendations", 6, 30, 12, step=3, key="top_n")
             semantic_weight = st.slider(
                 "plot meaning vs. tag overlap", 0.0, 1.0, 0.75, 0.05, key="sw",
                 help="1.0 = only the plot embeddings, 0.0 = only TMDB genres and keywords")

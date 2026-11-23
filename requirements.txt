@@ -8,3 +8,4 @@ requests>=2.31
 python-dotenv>=1.0
 sentence-transformers>=3.0
 streamlit[auth]>=1.57
+psycopg[binary,pool]>=3.2

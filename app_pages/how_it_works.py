@@ -23,14 +23,12 @@ st.html("""
     <p><code>"trapped in deadly children's games" ≈ "forced to play games to survive"</code></p></div>
   <div class="step"><div class="n">02</div><h3>it matches the themes</h3>
     <p>TMDB tags like <i>time travel</i>, <i>revenge</i> or <i>chaebol</i> are compared with
-    <b>TF-IDF</b>, which boosts rare, specific tags and ignores generic ones like "drama".</p>
-    <p><code>similarity = 0.75 × plot meaning + 0.25 × shared themes</code></p></div>
+    <b>TF-IDF</b>, which boosts rare, specific tags and ignores generic ones like "drama".</p></div>
   <div class="step"><div class="n">03</div><h3>it checks it's actually good</h3>
     <p>the 300 closest stories get re-ranked with a <b>Bayesian rating</b>, so a 9.5★ show with
-    4 votes can't beat an 8.6★ show with 4,000. you can tweak this balance with "tweak it".</p>
-    <p><code>score = 0.9 × similarity + 0.1 × quality</code></p></div>
+    4 votes can't beat an 8.6★ show with 4,000. you can tweak this balance with "tweak it".</p></div>
   <div class="step"><div class="n">04</div><h3>it shows its receipts</h3>
-    <p>every rec shows the themes it shares with your pick, and the "basically twins / same energy"
+    <p>every recommendation shows the themes it shares with your pick, and the "basically twins / same energy"
     bar is the real similarity score. pick several shows and it averages them into one
     <b>taste vector</b>.</p></div>
 </div>
