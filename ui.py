@@ -80,6 +80,7 @@ CSS = """
   .section em { color: var(--amber); }
   .foot { font-family: var(--mono); font-size: .68rem; color: var(--muted); letter-spacing: .03em;
           margin-top: 2.5rem; line-height: 1.7; }
+  .foot .legal { display: block; font-size: .6rem; opacity: .55; margin-top: .3rem; }
 
   /* ---- vibe ticker ---- */
   .ticker { overflow: hidden; white-space: nowrap; border-block: 1px solid var(--edge); padding: .55rem 0;
@@ -255,9 +256,11 @@ def page_title(eyebrow: str, title_html: str, sub_html: str = "") -> None:
 
 
 def footer() -> None:
-    st.html('<div class="foot">made during way too many 3am k-drama binges ✦ '
-            "data &amp; posters from TMDB. this product uses the TMDB API but is not endorsed or "
-            "certified by TMDB.</div>")
+    # The second line is TMDB's required attribution (their API terms). Keep that sentence as is.
+    st.html('<div class="foot">made during way too many 3am k-drama binges ✦ if you found your next '
+            "comfort show here, my ruined sleep schedule was worth it"
+            '<span class="legal">data &amp; posters from TMDB · this product uses the TMDB API but is '
+            "not endorsed or certified by TMDB.</span></div>")
 
 
 def card_html(card: dict, rank: int, top_match: float) -> str:

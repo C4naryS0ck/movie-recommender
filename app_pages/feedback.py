@@ -9,8 +9,8 @@ import streamlit as st
 import feedback_store as fb
 import ui
 
-TAGS = ["recs were spot on", "found my show", "the ui is a whole mood", "describe mode slaps",
-        "recs were off", "couldn't find my show", "too slow", "confusing"]
+TAGS = ["recommendations were spot on", "found my show", "the ui is a whole mood", "describe mode slaps",
+        "recommendations were off", "couldn't find my show", "too slow", "confusing"]
 COOLDOWN_S = 60
 MAX_PER_SESSION = 3
 
@@ -21,7 +21,7 @@ ui.ambient(None)
 ui.page_title(
     "rate us · takes 20 seconds",
     "be honest,<br>we can <em>take it</em>",
-    "loved it? hated it? recs were mid? tell me. i read every single one and use it to make this "
+    "loved it? hated it? recommendations were mid? tell me. I read every single one and use it to make this "
     "better. no account needed.",
 )
 st.space("small")
@@ -41,7 +41,7 @@ else:
             tags = st.pills("what stood out", TAGS, selection_mode="multi", key="fb_tags")
             message = st.text_area("anything else? (what to fix, what show we're missing, anything)",
                                    key="fb_msg", max_chars=fb.MAX_MESSAGE, height=110,
-                                   placeholder="the recs for goblin were scary accurate but…")
+                                   placeholder="the recommendations for goblin were scary accurate but…")
             name = st.text_input("name or @ (optional)", key="fb_name", max_chars=40,
                                  placeholder="shown if your review gets featured")
             sent = st.form_submit_button("send it", key="fb_submit", icon=":material/send:")

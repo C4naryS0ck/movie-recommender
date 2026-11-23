@@ -21,10 +21,10 @@ Indian, Thai and other non-Hollywood titles.
   against ratings.
 - **Typo-tolerant, alias-aware search:** "crash landng" finds *Crash Landing on You*, and "Goblin" finds *Guardian: The Lonely and Great God* (via TMDB alternative titles).
 - **Shareable links:** picks and filters live in the URL (`/?like=tv:67915`).
-- **Feedback without accounts:** visitors rate the site and leave notes; only reviews the admin
-  features appear publicly ("wall of love").
-- **Role-based access:** visitors never sign in. The owner signs in with Google to reach `/admin`
-  (feedback moderation, CSV export, most-picked titles, searches that found nothing).
+- **Feedback without accounts:** visitors rate the site and leave notes; only hand-picked
+  reviews appear publicly ("wall of love").
+- **Role-based access:** visitors never need an account. A private owner dashboard handles
+  feedback moderation and anonymous usage insights.
 - **SEO-ready:** `serve.py` gives crawlers and link previews real titles, descriptions, Open Graph
   tags, structured data, per-title "shows like X" pages, `robots.txt` and `sitemap.xml`.
 
@@ -36,7 +36,7 @@ Indian, Thai and other non-Hollywood titles.
 | `app_pages/discover.py` | The recommender UI |
 | `app_pages/how_it_works.py` | The method, explained for visitors |
 | `app_pages/feedback.py` | "rate us" form + featured reviews |
-| `app_pages/admin.py` | Owner-only dashboard (hidden from the menu for visitors) |
+| `app_pages/admin.py` | Private owner dashboard |
 | `core.py` / `ui.py` | Cached recommender + role check / shared styles and poster cards |
 | `feedback_store.py` | SQLite storage for feedback and anonymous usage events |
 | `serve.py` | Production entry point: wraps `app.py` with SEO tags, robots.txt, sitemap.xml |
@@ -71,7 +71,7 @@ score      = (1 − α) · similarity  +  α · quality(c),  α = 0.1  # applied
 |---|---|---|---|
 | 1 | [`phase-1.ipynb`](phase-1.ipynb), [`phase1_movielens.py`](phase1_movielens.py) | MovieLens 9.7k movies, TF-IDF on genres + user tags, cosine similarity, popularity hybrid | No TV / K-dramas, no plot text, so *Oldboy* → *Citizen Kane* ("Drama, Mystery") |
 | 2 | [`fetch_tmdb.py`](fetch_tmdb.py), [`recommender.py`](recommender.py) | TMDB movies + TV, sentence-transformer embeddings + keyword TF-IDF hybrid, semantic search | Single-page prototype |
-| 3 | [`app.py`](app.py), [`app_pages/`](app_pages), [`serve.py`](serve.py) | Multi-page app: feedback, Google-sign-in admin dashboard, usage insights, SEO | See *Future work* |
+| 3 | [`app.py`](app.py), [`app_pages/`](app_pages), [`serve.py`](serve.py) | Multi-page app: feedback, private owner dashboard, usage insights, SEO | See *Future work* |
 
 ## Run it locally
 
@@ -93,22 +93,6 @@ python recommender.py recommend "Crash Landing on You" --type tv
 python recommender.py describe "a grim reaper and an immortal goblin share a house"
 streamlit run app.py            # or: streamlit run serve.py  (same app + SEO extras)
 ```
-
-## Admin access
-
-Visitors never need an account. Only the owner signs in, using Google (Streamlit's `st.login`, a
-real OpenID Connect sign-in, not a shared password):
-
-1. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials) create an
-   **OAuth client ID** (type *Web application*). Add the redirect URI
-   `http://localhost:8501/oauth2callback` (and `https://<your-app>/oauth2callback` once deployed).
-2. Copy `.streamlit/secrets.toml.example` to `.streamlit/secrets.toml` (git-ignored) and fill in
-   the client ID/secret, a random `cookie_secret`, and your email under `[admin] emails`.
-3. Open `/admin` and sign in. Any other Google account gets "no admin access".
-
-**Storage note:** feedback is saved in SQLite (`data/feedback.db`). Streamlit Community Cloud
-wipes the disk on restart, so before relying on it in production, move `feedback_store.py` to a
-hosted database (e.g. Supabase). It's the only file that would change.
 
 ## Future work
 
