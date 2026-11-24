@@ -38,7 +38,7 @@ Indian, Thai and other non-Hollywood titles.
 | `app_pages/feedback.py` | "rate us" form + featured reviews |
 | `app_pages/admin.py` | Private owner dashboard |
 | `core.py` / `ui.py` | Cached recommender + role check / shared styles and poster cards |
-| `feedback_store.py` | SQLite storage for feedback and anonymous usage events |
+| `feedback_store.py` | Feedback and usage events: Supabase (PostgreSQL), SQLite fallback |
 | `serve.py` | Production entry point: wraps `app.py` with SEO tags, robots.txt, sitemap.xml |
 
 ## How it works
@@ -77,7 +77,7 @@ score      = (1 − α) · similarity  +  α · quality(c),  α = 0.1  # applied
 
 ```bash
 python -m venv .venv && .venv\Scripts\activate        # Windows (source .venv/bin/activate on macOS/Linux)
-pip install -r requirements.txt
+pip install -r requirements-build.txt   # requirements.txt alone is enough to just run the app
 
 # 1. Free TMDB API key: https://www.themoviedb.org/settings/api
 copy .env.example .env                                  # then paste your key into .env

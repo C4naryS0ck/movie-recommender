@@ -1,0 +1,6 @@
+# Everything in requirements.txt, plus what's needed to DOWNLOAD the TMDB data and BUILD the
+# embedding index on your own computer (fetch_tmdb.py, recommender.py build).
+-r requirements.txt
+requests>=2.31
+python-dotenv>=1.0
+sentence-transformers>=3.0

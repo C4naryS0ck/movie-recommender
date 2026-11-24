@@ -29,7 +29,7 @@ st.html("""
     4 votes can't beat an 8.6★ show with 4,000. you can tweak this balance with "tweak it".</p></div>
   <div class="step"><div class="n">04</div><h3>it shows its receipts</h3>
     <p>every recommendation shows the themes it shares with your pick, and the "basically twins / same energy"
-    bar is the real similarity score. pick several shows and it averages them into one
+    bar shows how close it is compared with your top match. pick several shows and it averages them into one
     <b>taste vector</b>.</p></div>
 </div>
 """)
@@ -43,15 +43,16 @@ st.markdown(
     "*Hotel del Luna*; the model figured out they're both about curses, the afterlife and "
     "doomed romance.\n\n"
     "It's also **not collaborative filtering** (\"people who watched X also watched Y\"), so "
-    "it doesn't need your watch history, an account or any tracking. A brand-new show with "
+    "it doesn't need your watch history, an account or a profile of you. A brand-new show with "
     "zero viewers can still be recommended on day one."
 )
 
 st.html('<div class="section">what we <em>store</em></div>')
 st.markdown(
     "- **No accounts, no emails, no IP addresses** from visitors.\n"
-    "- Anonymous counts of which titles get picked and which searches find nothing, so I know "
-    "what to add next.\n"
+    "- Which titles get picked, searches that find nothing, and **the text you type in describe the "
+    "vibe**, with the time but no name attached. Please don't type anything personal there. It shows me "
+    "what to improve.\n"
     "- Whatever you write in **rate us**. Reviews stay private unless the admin features them."
 )
 
@@ -62,7 +63,7 @@ with st.expander("tech stack (for the nerds)", icon=":material/code:"):
         "- **Model:** `sentence-transformers/all-MiniLM-L6-v2` embeddings + scikit-learn TF-IDF\n"
         "- **Ranking:** cosine similarity hybrid, Bayesian weighted rating (IMDb formula)\n"
         "- **Search:** typo-tolerant fuzzy matching (RapidFuzz) + TMDB alternative titles\n"
-        "- **App:** Streamlit, custom CSS, SQLite for feedback"
+        "- **App:** Streamlit, custom CSS, Supabase (PostgreSQL) for feedback"
     )
 
 ui.footer()
