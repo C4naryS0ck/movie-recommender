@@ -300,17 +300,30 @@ class Recommender:
                  languages: Iterable[str] | None = None, years: tuple[int, int] | None = None,
                  alpha: float = 0.1) -> dict:
         """Free-text search: 'a contract marriage between a chaebol heir and a webtoon artist'."""
-        q = self.encoder.encode([text], normalize_embeddings=True)[0].astype(np.float32)
-        sims = self.emb @ q
+        sims = self.emb @ self.embed_query(text)
         return {"matched": [], "suggestions": [],
                 "results": self._rank(sims, top_n, media_type, languages, years, alpha, 300)}
 
-    @property
-    def encoder(self):
+    def embed_query(self, text: str) -> np.ndarray:
+        """Encode one sentence with the same model that built the index.
+
+        Prefers fastembed (ONNX Runtime, no PyTorch: small enough for free hosting) and falls
+        back to sentence-transformers. Both give identical vectors for this model
+        (cosine 1.0, checked), so search results don't change.
+        """
         if self._encoder is None:
-            from sentence_transformers import SentenceTransformer
-            self._encoder = SentenceTransformer(self.encoder_name)
-        return self._encoder
+            try:
+                from fastembed import TextEmbedding
+
+                model = TextEmbedding(self.encoder_name)
+                self._encoder = lambda t: np.asarray(next(iter(model.embed([t]))))
+            except ImportError:
+                from sentence_transformers import SentenceTransformer
+
+                model = SentenceTransformer(self.encoder_name)
+                self._encoder = lambda t: model.encode([t])[0]
+        q = self._encoder(text).astype(np.float32)
+        return q / (np.linalg.norm(q) or 1)
 
     def _rank(self, sims, top_n, media_type, languages, years, alpha, candidates,
               why_from: list[int] | None = None) -> list[dict]:
